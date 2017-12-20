@@ -107,6 +107,32 @@ class BinarySearchTree(BinaryTree):
         delete in BST
         """
 
+    def maxValue(self, node):
+
+        if (node is not None):
+
+            maximum = node
+
+            while(maximum.right_child is not None):
+                maximum = maximum.right_child
+        else:
+            maximum = None
+
+        return maximum
+
+    def minValue(self, node):
+
+        if (node is not None):
+
+            minimum = node
+
+            while(minimum.right_child is not None):
+                minimum = minimum.left_child
+        else:
+            minimum = None
+
+        return minimum
+
 def main():
     """
     This is the docString for the main() function
@@ -118,7 +144,7 @@ def main():
           10
          /  \
         5   12
-       / \    \ 
+       / \    \
       4  8    20
         /    /
        7    15
@@ -131,7 +157,7 @@ def main():
     # insert new node into BST
     for value in data:
         new_node = Node(value)
-        bst.insert(bst.root, new_node) 
+        bst.insert(bst.root, new_node)
 
     # search value in BST
     bst.search(bst.root, 12)
@@ -153,6 +179,14 @@ def main():
     # postorder dump
     print(bst.bfs_dump.__doc__)
     bst.bfs_dump()
+
+    # minimum
+    m = bst.minValue(bst.root)
+    print("minimum = %d" % m.value)
+
+    # maximum
+    m = bst.maxValue(bst.root)
+    print("maximum = %d" % m.value)
 
 if __name__ ==  "__main__":
     main()
