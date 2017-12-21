@@ -88,19 +88,25 @@ class BinarySearchTree(BinaryTree):
 
         print(new_node.value)
 
-    def search(self, node, value):
+    def search(self, value, node, parent = None):
         """
         search in BST
         """
 
         if node is None:
             print("No match")
+            n = None
+            p = None
         elif node.value == value:
             print("match")
+            n = node
+            p = parent
         elif value < node.value:
-            self.search(node.left_child, value)
+            n, p = self.search(value, node.left_child, node)
         elif value > node.value:
-            self.search(node.right_child, value)
+            n, p = self.search(value, node.right_child, node)
+
+        return n, p
 
     def delete(self, value):
         """
@@ -160,9 +166,17 @@ def main():
         bst.insert(bst.root, new_node)
 
     # search value in BST
-    bst.search(bst.root, 12)
-    bst.search(bst.root, 8)
-    bst.search(bst.root, 9)
+    n, p = bst.search(12, bst.root)
+    if (n is not None):
+        print("%d is found. It's parent is %d" % (n.value, p.value))
+
+    n, p = bst.search(8, bst.root)
+    if (n is not None):
+        print("%d is found. It's parent is %d" % (n.value, p.value))
+
+    n, p = bst.search(9, bst.root)
+    if (n is not None):
+        print("%d is found. It's parent is %d" % (n.value, p.value))
 
     # inorder dump
     print(bst.inorder_dump.__doc__)
@@ -176,7 +190,7 @@ def main():
     print(bst.postorder_dump.__doc__)
     bst.postorder_dump(bst.root)
 
-    # postorder dump
+    # breadth first search dump
     print(bst.bfs_dump.__doc__)
     bst.bfs_dump()
 
