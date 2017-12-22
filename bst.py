@@ -113,31 +113,90 @@ class BinarySearchTree(BinaryTree):
         delete in BST
         """
 
-    def maxValue(self, node):
+        n, p = self.search(value, self.root)
+
+        if n is not None:
+            if (n.left_child is None and n.right_child is None):
+                #
+                # Case 1: The node with no children
+                #
+                print("The node with no children")
+                if (p is not None):
+                    if (p.left_child is n):
+                        p.left_child = None
+                        n = None
+                    elif (p.right_child is n):
+                        p.right_child = None
+                        n = None
+                else:
+                    #
+                    # If the tree has only root node and we want to delete it
+                    #
+                    self.root = None
+                    n = None
+            elif (n.left_child is not None and n.right_child is None):
+                #
+                # Case 2: The node with only left children
+                #
+                print("The node with only left children")
+                if (n.value <= p.value):
+                    p.left_child = n.left_child
+                elif (n.value > p.value):
+                    p.right_child = n.left_child
+
+                n = None
+            elif (n.left_child is None and n.right_child is not None):
+                #
+                # Case 2: The node with only right children
+                #
+                print("The node with only right children")
+                if (n.value <= p.value):
+                    p.left_child = n.right_child
+                elif (n.value > p.value):
+                    p.right_child = n.right_child
+
+                n = None
+            else:
+                #
+                # Case 3: The node with both left and right children
+                #
+                print("The node with both left and right children")
+                m, p = self.maxValue(n.left_child, n)
+                tmp = m.value
+                self.delete(m.value)
+                n.value = tmp
+
+    def maxValue(self, node, parent = None):
 
         if (node is not None):
 
             maximum = node
+            p = parent
 
             while(maximum.right_child is not None):
+                p = maximum
                 maximum = maximum.right_child
         else:
             maximum = None
+            p = None
 
-        return maximum
+        return maximum, p
 
-    def minValue(self, node):
+    def minValue(self, node, parent = None):
 
         if (node is not None):
 
             minimum = node
+            p = parent
 
             while(minimum.right_child is not None):
+                p = minimum
                 minimum = minimum.left_child
         else:
             minimum = None
+            p = None
 
-        return minimum
+        return minimum, p
 
 def main():
     """
@@ -195,12 +254,22 @@ def main():
     bst.bfs_dump()
 
     # minimum
-    m = bst.minValue(bst.root)
+    m, p = bst.minValue(bst.root)
     print("minimum = %d" % m.value)
 
     # maximum
-    m = bst.maxValue(bst.root)
+    m, p = bst.maxValue(bst.root)
     print("maximum = %d" % m.value)
+
+    # delete
+    bst.delete(8)
+    bst.bfs_dump()
+    bst.delete(7)
+    bst.bfs_dump()
+    bst.delete(12)
+    bst.bfs_dump()
+    bst.delete(5)
+    bst.bfs_dump()
 
 if __name__ ==  "__main__":
     main()
